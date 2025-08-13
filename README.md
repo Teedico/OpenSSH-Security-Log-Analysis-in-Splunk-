@@ -43,9 +43,9 @@ The dataset contained approximately **2,000 events**. Key observation features i
 
 These event patterns were instrumental in identifying potential attack signatures and prioritizing response actions.
 
-![ ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)]
+![Img ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)
 
-![ ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%202.jpg)]
+![Img](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%202.jpg)
 
 ## ANALYSIS BY TIMESTAMP
 
@@ -58,6 +58,8 @@ Key findings included:
 
 These are not normal user behaviors Such high-frequency login attempts strongly suggest brute-force or automated scanning activity rather than normal user behavior.
 
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%203.jpg)
+
 ## ANALYSIS BY GEOLOCATION
 A total of 496 failed SSH authentication attempts originated from non-Nigerian IP addresses. Source IPs were mapped to countries commonly associated with botnet or brute-force activity.
 Findings included:
@@ -65,10 +67,31 @@ China — over 300 combined attempts from multiple cities (Beijing, Shenzhen, We
 Mexico and Vietnam — significant volumes of login attempts.
 The dataset was filtered to exclude internal/Nigerian IPs, reinforcing that these were likely unauthorized foreign intrusion attempts.
 
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%204.jpg)
+
 ## ANALYSIS BY USERS 
 I analyzed failed SSH login attempts from the OpenSSH logs to determine the most frequently targeted usernames. The result  states root was the primary target accounting for 74.3% of all failed attempts. Other usernames like uucp, ftp, mysql, and git are common service accounts. 
 The heavy targeting of root suggests an active brute-force attack aiming for administrative access. Attempts on service accounts indicate automated scans or credential stuffing using known usernames. These patterns are typical of external threat actors probing for vulnerable systems. 
 
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%205.jpg)
 
- 
+## ANALYSIS BY MULTIPLE FAILED ATTEMPTS  
+To identify the source IP addresses (rhost) responsible for the highest number of failed SSH login 
+attempts, I ran the following Splunk query: 
+index="main" source="OpenSSH.csv" "authentication failure" 
+| rex "rhost=(?<rhost>\d{1,3}(?:\.\d{1,3}){3})" 
+| stats count by rhost 
+| sort –count 
+From this analysis: 
+ IP 183.62.140.253 emerged as the most aggressive attacker, accounting for 57.8% of the 
+496 total failed attempts. 
+ All IPs within the 183.62.140.x subnet collectively generated 431 attempts, indicating 
+either: 
+o A coordinated scanning effort, or 
+o A single attacker using multiple IP addresses in the same subnet. 
+The repeated IP patterns and consistent failure rates align with brute-force activity or botnet
+driven reconnaissance.
+
+ ![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%206.jpg)
+
 
