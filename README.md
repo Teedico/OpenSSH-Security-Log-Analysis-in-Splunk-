@@ -45,7 +45,7 @@ These event patterns were instrumental in identifying potential attack signature
 
 ![Img ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)
 
-![Img](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%202.jpg)
+![Img](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/137cd29737753bb21b9be57add801b4d69338542/ossh%202.jpg)
 
 ## ANALYSIS BY TIMESTAMP
 
