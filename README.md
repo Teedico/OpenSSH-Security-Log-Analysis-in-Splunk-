@@ -92,6 +92,67 @@ o A single attacker using multiple IP addresses in the same subnet.
 The repeated IP patterns and consistent failure rates align with brute-force activity or botnet
 driven reconnaissance.
 
- ![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%206.jpg)
+ ![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%206.jpg)
+
+ ## DASHBOARD CONFIGURATION 
+I created a Splunk dashboard to monitor high-frequency disconnect events originating from the IP address 112.95.230.3. The repetitive disconnection pattern and timing indicated that an external system was repeatedly attempting to establish SSH connections but was disconnected before authentication ([preauth]).
+The consistent nature of these disconnection events suggests potential network scanning or brute-force attack behavior. The dashboard visualized these events in real time, providing an early warning mechanism for rapid detection and investigation of similar suspicious activity.
+
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%207.jpg)
+
+## ALERT CONFIGURATION 
+To complement the dashboard, I implemented an automated alert system in Splunk with the following configuration:
+•	Schedule: Runs daily at 08:00 AM (WAT)
+•	Alert Expiration: Expires after 24 hours
+•	Trigger Condition: Fires when the number of matching results is greater than 2
+•	Notification Type: Plain-text email
+•	Recipients: Designated approved recipients within a specified domain
+•	Domain Restriction: Email delivery restricted to approved domains only (e.g., gmail.com) to enhance security and limit alert visibility
+Purpose of the alert:
+•	Detect and notify on suspicious SSH disconnect events
+•	Identify potential brute-force attempts or automated login failures
+•	Monitor for network scanning or reconnaissance activity
+•	Flag abuse from malicious IP addresses (bots or unauthorized users)
+•	Track unexpected session terminations on critical servers
+This configuration ensured that any suspicious activity was detected promptly and shared with the right stakeholders, reducing incident response time.
+  
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%208.jpg)
+
+![Image](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%209.jpg)
+
+## FIELD EXTRACTION CONFIGURATION 
+I configured a custom field extraction in Splunk for the src_ip field, which tracks the source hosts involved in SSH disconnect events. This field is critical for:
+•	Pinpointing the origin of suspicious SSH activity
+•	Informing automated defense mechanisms and blacklist rules
+•	Supporting SIEM correlation for broader security monitoring
+Splunk identified 95 unique values for src_ip, representing 99.95% of all events in the dataset. 
+
+![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%2010.jpg)
+
+## CONCLUSION 
+The analysis of the OpenSSH.csv logs through Splunk has revealed a high number of failed SSH authentication attempts primarily from a concentrated group of external IP addresses like 183.62.140.253 from Beijing China as the top offender with 287 login failures, several other IPs from the same subnet were also active suggesting automated or coordinated attack attempts likely brute-force in nature. Attempts were mainly directed at privileged accounts like root accounting for 74% of the total failed logins 369 out of 496, 
+The source of attacks includes countries such as China, Mexico, Vietnam, Russia, and the United States, indicating global threat vectors targeting the system. 
+These patterns are consistent with credential stuffing, dictionary attacks, or brute force login attempts, and if not mitigated it could lead to unauthorized system access and compromise of critical infrastructure. 
+
+## RECOMMENDATIONS  
+Based on the findings from this analysis, I recommend the following measures to strengthen SSH security and reduce the risk of unauthorized access:
+Immediate Mitigation
+•	Block/Blacklist Malicious IPs: Use firewall rules to block high-risk IPs, such as 183.62.140.253.
+•	Disable Root Login: Prevent direct SSH login to the root account.
+Access Hardening
+•	Enable Rate Limiting: Deploy tools like Fail2Ban or SSHGuard to automatically block IPs with multiple failed login attempts.
+•	Restrict Access via Geo-IP: Implement IP filtering to block SSH access from high-risk countries unless explicitly required for operations.
+•	Use SSH Keys Instead of Passwords: Enforce public key authentication for all users to eliminate password-based attacks.
+Account Security
+•	Enforce Strong Password Policies: Require complex passwords and periodic password changes.
+•	Limit SSH Access to Specific Users: Use AllowUsers or AllowGroups directives in the SSH configuration to restrict access.
+
+
+
+
+
+
+
+
 
 
