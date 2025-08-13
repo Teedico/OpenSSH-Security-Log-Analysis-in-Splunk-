@@ -43,7 +43,9 @@ The dataset contained approximately **2,000 events**. Key observation features i
 
 These event patterns were instrumental in identifying potential attack signatures and prioritizing response actions.
 
-![(https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)]
+![ ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)]
+
+![ ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%202.jpg)]
 
 ## ANALYSIS BY TIMESTAMP
 
