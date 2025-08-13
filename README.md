@@ -115,10 +115,6 @@ Purpose of the alert:
 •	Flag abuse from malicious IP addresses (bots or unauthorized users)
 •	Track unexpected session terminations on critical servers
 This configuration ensured that any suspicious activity was detected promptly and shared with the right stakeholders, reducing incident response time.
-  
-![Image Below ](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%208.jpg)
-
-![Image](https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/59fc80e4f690d76a3c111ab650cdecec52209175/ossh%209.jpg)
 
 ## FIELD EXTRACTION CONFIGURATION 
 I configured a custom field extraction in Splunk for the src_ip field, which tracks the source hosts involved in SSH disconnect events. This field is critical for:
