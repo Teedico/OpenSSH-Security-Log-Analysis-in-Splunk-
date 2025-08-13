@@ -5,7 +5,7 @@ I analyzed an OpenSSH log file to identify potential security threats to an orga
 
 Using Splunk Cloud, I uploaded and processed the log file, uncovering patterns including repeated authentication failures, invalid user access attempts, and high volumes of login failures from specific IPs (e.g., 183.62.140.253). I also identified disconnect messages (Bye Bye [preauth]) linked to multiple IPs originating from different geolocations.
 
-The behavioral patterns indicated probable brute-force attempts via automated scanning botnets or unauthorized probes. To address this, I developed a **Splunk dashboard** and configured an **alerting system** to detect and trigger notifications for potential brute-force or unauthorized access attempts. Additionally, I reviewed and implemented **user role configurations** based on the principle of least privilege to strengthen access control.
+The behavioral patterns indicated probable brute-force attempts via automated scanning botnets or unauthorized probes. To address this, I developed a Splunk dashboard and configured an alerting system to detect and trigger notifications for potential brute-force or unauthorized access attempts. Additionally, I reviewed and implemented user role configurations based on the principle of least privilege to strengthen access control.
 
 ## USER CREATION AND ROLE MANAGEMENT
 
@@ -23,7 +23,7 @@ During account setup, I implemented the following configurations:
 *   **Default Application:** Configured the Launcher (Home) as the default application for a uniform post-login experience.
 *   **Password Policy Enforcement:** Required all users to change their password upon first login to enhance account security.
 
-This approach ensured a **principle of least privilege** was applied, reduced unauthorized access risk, and improved audit readiness.
+This approach ensured a principle of least privilege was applied, reduced unauthorized access risk, and improved audit readiness.
 
 ## ANALYSIS OF OPENSSH LOG FILE
 
@@ -43,6 +43,8 @@ The dataset contained approximately **2,000 events**. Key observation features i
 
 These event patterns were instrumental in identifying potential attack signatures and prioritizing response actions.
 
+![(https://github.com/Teedico/OpenSSH-Security-Log-Analysis-in-Splunk-/blob/a692a875d786b2a66b001010a44d6044dd57fa9a/ossh%201.jpg)]
+
 ## ANALYSIS BY TIMESTAMP
 
 I grouped log events into **5-minute intervals** to observe activity spikes and patterns. The analysis counted how many failed login attempts each remote host (rhost) generated in a given 5-minute window, filtering only IPs with **more than 5 attempts** in any interval. Results were sorted in descending order by time to prioritize the latest suspicious activity.
@@ -52,4 +54,19 @@ Key findings included:
 *   **IP 183.62.140.253** – highly aggressive, making **129–141 login attempts** within several 5-minute intervals.
 *   **IPs 103.99.0.122, 187.141.143.180, and 112.195.230.3** — repeatedly attempting logins at abnormal rates.
 
-These are not normal user behaviors Such high-frequency login attempts strongly suggest **brute-force or automated scanning activity** rather than normal user behavior.
+These are not normal user behaviors Such high-frequency login attempts strongly suggest brute-force or automated scanning activity rather than normal user behavior.
+
+## ANALYSIS BY GEOLOCATION
+A total of 496 failed SSH authentication attempts originated from non-Nigerian IP addresses. Source IPs were mapped to countries commonly associated with botnet or brute-force activity.
+Findings included:
+China — over 300 combined attempts from multiple cities (Beijing, Shenzhen, Weifang, Langfang).
+Mexico and Vietnam — significant volumes of login attempts.
+The dataset was filtered to exclude internal/Nigerian IPs, reinforcing that these were likely unauthorized foreign intrusion attempts.
+
+## ANALYSIS BY USERS 
+I analyzed failed SSH login attempts from the OpenSSH logs to determine the most frequently targeted usernames. The result  states root was the primary target accounting for 74.3% of all failed attempts. Other usernames like uucp, ftp, mysql, and git are common service accounts. 
+The heavy targeting of root suggests an active brute-force attack aiming for administrative access. Attempts on service accounts indicate automated scans or credential stuffing using known usernames. These patterns are typical of external threat actors probing for vulnerable systems. 
+
+
+ 
+
